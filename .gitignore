@@ -1,0 +1,14 @@
+.DS_Store
+.idea/
+target/
+*.sln.iml
+*.exe
+*.class
+*.iml
+local_driver/
+allure-results/
+logs/
+.allure/
+allure-report/
+config/config.properties
+*.log
