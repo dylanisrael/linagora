@@ -41,8 +41,8 @@ public class Page {
     @FindBy(className = "decathlon-logo")
     protected WebElement decathlonLogo;
     
-    String jsClickCode = "arguments[0].scrollIntoView(true); arguments[0].click();";
-    String jsScrollCode = "arguments[0].scrollIntoView(true);";
+    private String jsClickCode = "arguments[0].scrollIntoView(true); arguments[0].click();";
+    private String jsScrollCode = "arguments[0].scrollIntoView(true);";
     
     /***
      *
