@@ -1,6 +1,6 @@
 @MinorAbnormalities
 @severity=minor
-c
+Feature: Annomalies mineures
 
 
 

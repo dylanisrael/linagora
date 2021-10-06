@@ -14,13 +14,14 @@ import org.openqa.selenium.logging.LogType;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.testng.Assert;
+
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.file.Paths;
 import java.time.Duration;
 import java.util.List;
 import java.util.function.Function;
@@ -31,10 +32,10 @@ import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOf;
 
 public class Page {
     
-    @FindBy(css = "div.didomi-popup-view")
+    @FindBy(css = "cookie-law-info-bar")
     private WebElement popInCookieWrap;
     
-    @FindBy(id = "didomi-notice-agree-button")
+    @FindBy(id = "cookie_action_close_header")
     private WebElement popInCookieButton;
     
     @FindBy(className = "decathlon-logo")
@@ -178,6 +179,24 @@ public class Page {
         }
     }
     
+    /**
+     * sendKeys to a field
+     * @param element
+     * @param text
+     */
+    protected void sendKeys(WebElement element,String text){
+        if (!shortUntil(visibilityOf(element))) {
+            // Logger
+            throw new RuntimeException("Element not visible");
+        }
+    
+        if (!shortUntil(elementToBeClickable(element))) {
+            // Logger
+            throw new RuntimeException("Element not accessible");
+        }
+        element.sendKeys(text);
+    }
+    
     //    vertical scrolling on the page
     protected void scroll(int height) {
         js.executeScript("window.scrollBy(0," + height + ")", "");
@@ -201,11 +220,8 @@ public class Page {
                     || bottomLeft1.getY() < topRight2.getY()) {
             return false;
         }
-        if (topRight1.getX() < bottomLeft2.getX()
-                    || bottomLeft1.getX() > topRight2.getX()) {
-            return false;
-        }
-        return true;
+        return topRight1.getX() >= bottomLeft2.getX()
+                       && bottomLeft1.getX() <= topRight2.getX();
     }
     
     //    Get size of an element
@@ -215,8 +231,8 @@ public class Page {
     
     //    check if file is present in a directory
     protected boolean filePresent() {
-        String path = "/Users/dylanIsrael/Downloads/";
-        File folder = new File(path);
+        String downloadDir = Paths.get("target").toAbsolutePath().toString();
+        File folder = new File(downloadDir);
         //List the files on that folder
         File[] listOfFiles = folder.listFiles();
         boolean found = false;
@@ -224,24 +240,23 @@ public class Page {
         //Look for the file in the files
         // You should write smart REGEX according to the filename
         try {
+            assert listOfFiles != null;
             for (File listOfFile : listOfFiles) {
                 if (listOfFile.isFile()) {
                     String fileName = listOfFile.getName();
                     // System.out.println("File " + listOfFile.getName());
                     if (fileName.matches("oembed")) {
-                        f = new File(path + fileName);
+                        f = new File(downloadDir+fileName);
                         found = true;
                         System.out.println("fichier trouve  " + found);
                         System.out.println(f);
-                        f.delete();
-                        
+                        f.deleteOnExit();
                     }
                 }
             }
-        } catch (Exception e) {
-            Assert.assertTrue(found, "Downloaded document is not found");
+        }catch (Exception e){
+            Log.info("any file found");
         }
-        f.deleteOnExit();
         return found;
     }
     

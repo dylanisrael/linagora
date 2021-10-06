@@ -11,7 +11,7 @@ import io.cucumber.testng.CucumberOptions;
                 "io.qameta.allure.cucumber6jvm.AllureCucumber6Jvm"
         },
         features = {"src/test/resources"},
-        glue = {"com.linagora.steps", "com/linagora/pageObjects"}
+        glue = {"com/linagora/steps", "com/linagora/pageObjects"}
 )
 public class TestRunner extends BaseRunner{
 }
