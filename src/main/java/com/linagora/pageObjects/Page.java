@@ -294,19 +294,8 @@ public class Page {
         Allure.addAttachment("screenshot", new ByteArrayInputStream(((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES)));
     }
     
-    public Boolean checkUrlResponseCode(String url) {
-        
-        try {
-            HttpURLConnection c = (HttpURLConnection) new URL(url).openConnection();
-            c.setRequestMethod("HEAD");
-            c.connect();
-            int r = c.getResponseCode();
-            System.out.println("Http response code: " + r);
-            return r != 200;
-        } catch (Exception e) {
-            return false;
-        }
-        
+    public Boolean checkUrlResponseCode(String url) throws IOException {
+        return !Integer.valueOf(getUrlResponseCode(url)).equals(200);
     }
     
     public String getTitle() {
